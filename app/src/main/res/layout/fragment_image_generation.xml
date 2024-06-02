@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".image.ImageGenerationFragment" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:id="@+id/promptEditTextHF"
+            android:layout_width="354dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="24dp"
+            android:autofillHints=""
+            android:hint="@string/image_prompt_text"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
+
+        <Button
+            android:id="@+id/generateButtonHF"
+            android:layout_width="214dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/image_generation_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/promptEditTextHF" />
+
+        <Button
+            android:id="@+id/saveButtonHF"
+            android:layout_width="214dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="416dp"
+            android:visibility="gone"
+            android:text="@string/image_generation_save_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generateButtonHF" />
+
+        <ImageView
+            android:id="@+id/imageViewHF"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="result"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generateButtonHF"
+            app:layout_constraintVertical_bias="0.371"
+            app:layout_constraintWidth_percent="0.8"
+            tools:ignore="HardcodedText" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="157dp"
+            android:layout_height="165dp"
+            android:indeterminateTint="@color/purple_500"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/imageViewHF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generateButtonHF"
+            app:layout_constraintVertical_bias="1.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

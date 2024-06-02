@@ -41,4 +41,9 @@
         android:label="@string/menu_music"
         tools:layout="@layout/fragment_api_music" >
     </fragment>
+    <fragment
+        android:id="@+id/nav_imagen"
+        android:name="com.example.project.image.ImageGenerationFragment"
+        android:label="fragment_image_generation"
+        tools:layout="@layout/fragment_image_generation" />
 </navigation>

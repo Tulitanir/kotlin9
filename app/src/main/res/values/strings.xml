@@ -33,4 +33,8 @@
     <string name="_15_0">15.0</string>
     <string name="description">description</string>
     <string name="weather_icon">weather icon</string>
+    <string name="image_generation">Image generation</string>
+    <string name="image_prompt_text">Введите подсказку</string>
+    <string name="image_generation_button">Сгенерировать</string>
+    <string name="image_generation_save_button">Сохранить</string>
 </resources>
