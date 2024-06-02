@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.project.home.HomeFragment"
+        android:label="@string/menu_login"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_registationFragment"
+            app:destination="@id/nav_registation" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_slideshow"
+        android:name="com.example.project.slideshow.SlideshowFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_registation"
+        android:name="com.example.project.registation.RegistationFragment"
+        android:label="@string/menu_reg"
+        tools:layout="@layout/fragment_registation" />
+    <fragment
+        android:id="@+id/nav_edit"
+        android:name="com.example.project.editPage.Edit_user"
+        android:label="@string/menu_edit"
+        tools:layout="@layout/fragment_edit_user" />
+    <fragment
+        android:id="@+id/nav_gallery"
+        android:name="com.example.project.weather.WeatherFragment"
+        android:label="@string/menu_gallery"
+        tools:layout="@layout/fragment_weather" />
+    <fragment
+        android:id="@+id/nav_music"
+        android:name="com.example.project.music.ApiMusicFragment"
+        android:label="@string/menu_music"
+        tools:layout="@layout/fragment_api_music" >
+    </fragment>
+</navigation>

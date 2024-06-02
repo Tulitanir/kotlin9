@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "80530857451",
+    "firebase_url": "https://braided-flow-374315-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "braided-flow-374315",
+    "storage_bucket": "braided-flow-374315.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80530857451:android:19d57691ac76edeab68dae",
+        "android_client_info": {
+          "package_name": "com.zacho.kotlin9"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_eehzDUYI2-xSZqxdU2zBcRGXej6E23M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
