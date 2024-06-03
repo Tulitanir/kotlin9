@@ -64,7 +64,8 @@ class ApiMusicFragment : Fragment() {
 
     private fun clearMusicPlayer() {
         currentMediaPlayer?.stop()
-        currentMediaPlayer?.prepareAsync()
+        currentMediaPlayer?.prepare()
+        currentMediaPlayer = null
     }
 
     private fun setCurrentMediaPlayer(mediaPlayer: MediaPlayer) {

@@ -14,7 +14,7 @@ import com.example.project.R
 import com.squareup.picasso.Picasso
 
 
-class MusicAdapter(val context: Context, val dataList: List<Data>,
+class MusicAdapter(val context: Context, private val dataList: List<Data>,
                    val setCurrentMediaPlayer: (MediaPlayer) -> Unit
 ):
     RecyclerView.Adapter<MusicAdapter.MusicViewHolder>() {
@@ -36,8 +36,13 @@ class MusicAdapter(val context: Context, val dataList: List<Data>,
         Picasso.get().load(currentData.album.cover).into(holder.image)
 
         holder.play.setOnClickListener() {
-            setCurrentMediaPlayer(mediaPlayer)
-            mediaPlayer.start()
+            if (mediaPlayer.currentPosition == 0) {
+                setCurrentMediaPlayer(mediaPlayer)
+            }
+
+            if (!mediaPlayer.isPlaying) {
+                mediaPlayer.start()
+            }
         }
 
         holder.pause.setOnClickListener() {
@@ -46,7 +51,7 @@ class MusicAdapter(val context: Context, val dataList: List<Data>,
 
         holder.stop.setOnClickListener() {
             mediaPlayer.stop()
-            mediaPlayer.prepareAsync()
+            mediaPlayer.prepare()
         }
     }
 
