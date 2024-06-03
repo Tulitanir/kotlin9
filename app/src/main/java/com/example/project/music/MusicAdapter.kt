@@ -14,7 +14,9 @@ import com.example.project.R
 import com.squareup.picasso.Picasso
 
 
-class MusicAdapter(val context: Context, val dataList: List<Data>):
+class MusicAdapter(val context: Context, val dataList: List<Data>,
+                   private var currentMediaPlayer: MediaPlayer?
+):
     RecyclerView.Adapter<MusicAdapter.MusicViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
@@ -34,6 +36,14 @@ class MusicAdapter(val context: Context, val dataList: List<Data>):
         Picasso.get().load(currentData.album.cover).into(holder.image)
 
         holder.play.setOnClickListener() {
+            currentMediaPlayer?.let {
+                if (it.isPlaying) {
+                    it.stop()
+                    it.prepareAsync()
+                }
+            }
+            currentMediaPlayer = mediaPlayer
+
             mediaPlayer.start()
         }
 

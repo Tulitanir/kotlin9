@@ -1,12 +1,12 @@
 package com.example.project.music
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
@@ -25,6 +25,7 @@ class ApiMusicFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var musicAdapter: MusicAdapter
+    private var currentMediaPlayer: MediaPlayer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +45,7 @@ class ApiMusicFragment : Fragment() {
             override fun onResponse(p0: Call<MusicData?>, p1: Response<MusicData?>) {
                 val data = p1.body()?.data!!
 
-                musicAdapter = MusicAdapter(view.context, data)
+                musicAdapter = MusicAdapter(view.context, data, currentMediaPlayer)
                 recyclerView.adapter = musicAdapter
                 recyclerView.layoutManager = LinearLayoutManager(context)
 
