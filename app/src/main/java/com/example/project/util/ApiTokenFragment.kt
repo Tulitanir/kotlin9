@@ -24,11 +24,6 @@ class ApiTokenFragment : Fragment() {
         apiTokenEditText = view.findViewById(R.id.apiTokenEditText)
         saveButton = view.findViewById(R.id.saveButton)
 
-        val existingToken = getTokenFromPreferences(requireContext())
-        if (existingToken.isNotEmpty()) {
-            apiTokenEditText.setText(existingToken)
-        }
-
         saveButton.setOnClickListener {
             val token = apiTokenEditText.text.toString()
             if (token.isNotEmpty()) {
@@ -45,11 +40,6 @@ class ApiTokenFragment : Fragment() {
     private fun saveTokenToPreferences(context: Context, token: String) {
         val sharedPreferences = context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
         sharedPreferences.edit().putString("api_token", token).apply()
-    }
-
-    private fun getTokenFromPreferences(context: Context): String {
-        val sharedPreferences = context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("api_token", "") ?: ""
     }
 
     companion object {

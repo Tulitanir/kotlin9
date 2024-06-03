@@ -75,13 +75,14 @@ class ImageGenerationFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
 
         generateButton.setOnClickListener {
-            val prompt = promptEditText.text.toString()
-            fetchImage(prompt)
-        }
+            val prompt = promptEditText.text.toString().trim()
+            if (prompt.isEmpty()) {
+                Toast.makeText(context, "Пожалуйста, введите подсказку", Toast.LENGTH_SHORT).show()
+            }
 
-        generateButton.setOnClickListener {
-            val prompt = promptEditText.text.toString()
-            fetchImage(prompt)
+            else {
+                fetchImage(prompt)
+            }
         }
 
         saveButton.setOnClickListener {
@@ -137,7 +138,12 @@ class ImageGenerationFragment : Fragment() {
                     }
                 } else {
                     progressBar.visibility = View.GONE
-                    Toast.makeText(context, "Ошибка при получении изображения: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    if (response.code() == 400) {
+                        Toast.makeText(context, "Ошибка при получении изображения: ${response.message()}. Возможно API токен недействителен", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        Toast.makeText(context, "Ошибка при получении изображения: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
 
