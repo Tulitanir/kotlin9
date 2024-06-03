@@ -25,14 +25,14 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="@string/nav_header_title"
-        android:textColor="@color/design_default_color_on_secondary"
+        android:textColor="@color/design_default_color_secondary_variant"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/headertextLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/design_default_color_on_secondary"
+        android:textColor="@color/design_default_color_secondary_variant"
         android:text="@string/nav_header_subtitle"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -40,6 +40,6 @@
         android:id="@+id/headertextDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/design_default_color_on_secondary"
+        android:textColor="@color/design_default_color_secondary_variant"
         android:text="@string/nav_header_subtitle" />
 </LinearLayout>
