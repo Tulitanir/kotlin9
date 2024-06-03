@@ -29,15 +29,12 @@ class MainActivity : AppCompatActivity(), PasswordChangeListener {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-
         val drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_edit, R.id.nav_slideshow, R.id.nav_gallery, R.id.nav_music, R.id.nav_imagen
+                R.id.nav_home, R.id.nav_edit, R.id.nav_slideshow, R.id.nav_gallery, R.id.nav_music, R.id.nav_imagen, R.id.nav_settings
             ),
             drawerLayout,
         )

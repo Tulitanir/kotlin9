@@ -40,4 +40,8 @@
     <string name="search">Поиск</string>
     <string name="enter_artist_name">Введите запрос</string>
     <string name="other_category">Разное</string>
+    <string name="save_token">Сохранить</string>
+    <string name="api_token_text">Введите API токен</string>
+    <string name="settings_label">Настройки</string>
+    <string name="settings_category">Параметры</string>
 </resources>

@@ -150,7 +150,7 @@ class ImageGenerationFragment : Fragment() {
 
     private fun getTokenFromPreferences(): String {
         val sharedPreferences = requireContext().getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("api_token", "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") ?: ""
+        return sharedPreferences.getString("api_token", "") ?: ""
     }
 
     companion object {
