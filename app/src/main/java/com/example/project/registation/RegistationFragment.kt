@@ -57,11 +57,11 @@ class RegistationFragment : Fragment() {
                 FirebaseFirestore.setLoggingEnabled(true)
 
                 val userbld = User.Builder()
-                    .username(binding.textName.text.toString())
-                    .usersurname(binding.textSurname.text.toString())
-                    .login(binding.textLogin.text.toString())
-                    .password(binding.textPass.text.toString())
-                    .date(binding.textdate.text.toString())
+                    .username(binding.textName.text.toString().trim())
+                    .usersurname(binding.textSurname.text.toString().trim())
+                    .login(binding.textLogin.text.toString().trim())
+                    .password(binding.textPass.text.toString().trim())
+                    .date(binding.textdate.text.toString().trim())
 
                 if (this::uri.isInitialized) {
                     userbld.image(imagebytes)
@@ -71,7 +71,7 @@ class RegistationFragment : Fragment() {
 
                 // Проверяем, существует ли пользователь с таким логином
                 db.collection("users")
-                    .whereEqualTo("login", binding.textLogin.text.toString())
+                    .whereEqualTo("login", binding.textLogin.text.toString().trim())
                     .get()
                     .addOnSuccessListener { documents ->
                         if (documents.isEmpty) {

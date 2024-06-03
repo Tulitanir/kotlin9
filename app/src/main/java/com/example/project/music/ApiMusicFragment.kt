@@ -51,7 +51,7 @@ class ApiMusicFragment : Fragment() {
 
         searchButton.setOnClickListener {
             clearMusicPlayer()
-            val query = searchEditText.text.toString()
+            val query = searchEditText.text.toString().trim()
             if (query.isNotBlank()) {
                 recyclerView.visibility = View.GONE
                 progressBar.visibility = View.VISIBLE

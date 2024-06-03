@@ -48,8 +48,8 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_nav_home_to_registationFragment)
         }
         binding.buttonLogin.setOnClickListener {
-            val login = binding.editTextLogin.text.toString()
-            val password = binding.editTextPassword.text.toString()
+            val login = binding.editTextLogin.text.toString().trim()
+            val password = binding.editTextPassword.text.toString().trim()
             val db = Firebase.firestore
             db.collection("users")
                 .whereEqualTo("login", login)
