@@ -46,7 +46,6 @@
         android:layout_width="199dp"
         android:layout_height="208dp"
         android:layout_marginTop="88dp"
-        android:indeterminateTint="@color/purple_500"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

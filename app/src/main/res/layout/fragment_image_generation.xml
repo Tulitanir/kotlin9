@@ -64,7 +64,6 @@
             android:id="@+id/progressBar"
             android:layout_width="157dp"
             android:layout_height="165dp"
-            android:indeterminateTint="@color/purple_500"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/imageViewHF"
             app:layout_constraintEnd_toEndOf="parent"
