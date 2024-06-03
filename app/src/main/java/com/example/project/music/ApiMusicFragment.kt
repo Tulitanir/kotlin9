@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,7 @@ class ApiMusicFragment : Fragment() {
     private lateinit var musicAdapter: MusicAdapter
     private lateinit var searchEditText: EditText
     private lateinit var searchButton: Button
+    private lateinit var progressBar: ProgressBar
     private var currentMediaPlayer: MediaPlayer? = null
 
     override fun onCreateView(
@@ -40,6 +42,7 @@ class ApiMusicFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView)
         searchEditText = view.findViewById(R.id.searchEditText)
         searchButton = view.findViewById(R.id.searchButton)
+        progressBar = view.findViewById(R.id.progressBarMusic)
         return view
     }
 
@@ -50,6 +53,8 @@ class ApiMusicFragment : Fragment() {
             clearMusicPlayer()
             val query = searchEditText.text.toString()
             if (query.isNotBlank()) {
+                recyclerView.visibility = View.GONE
+                progressBar.visibility = View.VISIBLE
                 fetchMusicData(query)
             } else {
                 Toast.makeText(context, "Пожалуйста, введите запрос", Toast.LENGTH_SHORT).show()
@@ -76,6 +81,8 @@ class ApiMusicFragment : Fragment() {
                 musicAdapter = MusicAdapter(view!!.context, data, ::setCurrentMediaPlayer)
                 recyclerView.adapter = musicAdapter
                 recyclerView.layoutManager = LinearLayoutManager(context)
+                progressBar.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
                 Log.d("onResponse", "onResponse: " + response.body())
             }
 
