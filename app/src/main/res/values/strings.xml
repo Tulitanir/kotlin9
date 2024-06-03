@@ -7,12 +7,12 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_login">Login</string>
-    <string name="menu_gallery">Weather</string>
+    <string name="menu_login">Вход</string>
+    <string name="menu_gallery">Погода</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_reg">Registration</string>
-    <string name="menu_home">Home</string>
-    <string name="menu_edit">Edit</string>
+    <string name="menu_reg">Регистрация</string>
+    <string name="menu_home">Домашняя страница</string>
+    <string name="menu_edit">Редактирование</string>
     <string name="hintpass">Введете пароль</string>
     <string name="hintlogin">Введите логин</string>
     <string name="logintext">Войти</string>
@@ -22,7 +22,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hintStream">Введите поток</string>
-    <string name="menu_music">Music</string>
+    <string name="menu_music">Музыка</string>
     <string name="copy">Copy</string>
     <string name="stop">Stop</string>
     <string name="pause">Pause</string>
@@ -33,7 +33,7 @@
     <string name="_15_0">15.0</string>
     <string name="description">description</string>
     <string name="weather_icon">weather icon</string>
-    <string name="image_generation">Image generation</string>
+    <string name="image_generation">Генерация изображений</string>
     <string name="image_prompt_text">Введите подсказку</string>
     <string name="image_generation_button">Сгенерировать</string>
     <string name="image_generation_save_button">Сохранить</string>

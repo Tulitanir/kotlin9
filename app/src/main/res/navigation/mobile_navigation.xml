@@ -44,6 +44,6 @@
     <fragment
         android:id="@+id/nav_imagen"
         android:name="com.example.project.image.ImageGenerationFragment"
-        android:label="fragment_image_generation"
+        android:label="@string/image_generation"
         tools:layout="@layout/fragment_image_generation" />
 </navigation>
