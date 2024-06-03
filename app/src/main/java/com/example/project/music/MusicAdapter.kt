@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso
 
 
 class MusicAdapter(val context: Context, val dataList: List<Data>,
-                   private var currentMediaPlayer: MediaPlayer?
+                   val setCurrentMediaPlayer: (MediaPlayer) -> Unit
 ):
     RecyclerView.Adapter<MusicAdapter.MusicViewHolder>() {
 
@@ -36,14 +36,7 @@ class MusicAdapter(val context: Context, val dataList: List<Data>,
         Picasso.get().load(currentData.album.cover).into(holder.image)
 
         holder.play.setOnClickListener() {
-            currentMediaPlayer?.let {
-                if (it.isPlaying) {
-                    it.stop()
-                    it.prepareAsync()
-                }
-            }
-            currentMediaPlayer = mediaPlayer
-
+            setCurrentMediaPlayer(mediaPlayer)
             mediaPlayer.start()
         }
 

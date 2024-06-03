@@ -37,4 +37,6 @@
     <string name="image_prompt_text">Введите подсказку</string>
     <string name="image_generation_button">Сгенерировать</string>
     <string name="image_generation_save_button">Сохранить</string>
+    <string name="search">Поиск</string>
+    <string name="enter_artist_name">Введите запрос</string>
 </resources>
