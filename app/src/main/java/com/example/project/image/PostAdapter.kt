@@ -9,8 +9,10 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
+import com.example.project.dialogs.UpdatePostFragment
 import com.example.project.music.MusicAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -20,6 +22,7 @@ import com.squareup.picasso.Picasso
 class PostAdapter(val context: Context,
                   private var dataList: MutableList<PostInfo>,
                   private val db: FirebaseFirestore,
+                  private val fragmentManager: FragmentManager,
                   private val isEditable: Boolean = false):
     RecyclerView.Adapter<PostAdapter.PostViewHolder>()  {
 
@@ -44,6 +47,17 @@ class PostAdapter(val context: Context,
 
         holder.delete.setOnClickListener {
             currentItem.post.imageUrl?.let { it1 -> deletePost(position, currentItem.postId, it1) }
+        }
+
+        holder.edit.setOnClickListener {
+            val editDialog = UpdatePostFragment(currentItem) {editedItem ->
+                db.collection("posts").document(currentItem.postId).set(editedItem.post)
+                    .addOnSuccessListener {
+                        dataList[position] = editedItem
+                        notifyItemChanged(position)
+                    }
+            }
+            editDialog.show(fragmentManager, "EditNewsDialog")
         }
 
         if (!isEditable) {

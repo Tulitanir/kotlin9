@@ -80,7 +80,7 @@ class SlideshowFragment : Fragment() {
                     }
                 }
 
-                postAdapter = PostAdapter(view.context, data, db,true)
+                postAdapter = PostAdapter(view.context, data, db, parentFragmentManager, true)
                 recyclerView.adapter = postAdapter
                 recyclerView.layoutManager = LinearLayoutManager(context)
             }

@@ -56,4 +56,5 @@
     <string name="user_login">user login</string>
     <string name="edit_post">edit post</string>
     <string name="delete_post">delete post\n</string>
+    <string name="save_post_changes">Сохранить</string>
 </resources>
