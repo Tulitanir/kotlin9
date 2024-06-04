@@ -88,8 +88,4 @@ class SlideshowFragment : Fragment() {
                 Toast.makeText(context, "Не удалось загрузить посты", Toast.LENGTH_SHORT).show()
             }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 }

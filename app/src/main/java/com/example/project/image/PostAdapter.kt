@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
+import com.example.project.dialogs.ShowPostFragment
 import com.example.project.dialogs.UpdatePostFragment
 import com.example.project.music.MusicAdapter
 import com.google.firebase.firestore.FirebaseFirestore
@@ -39,6 +40,12 @@ class PostAdapter(val context: Context,
         val currentItem = dataList[position]
 
         Picasso.get().load(currentItem.post.imageUrl).into(holder.image)
+        holder.image
+            .setOnClickListener {
+                val showDialog = ShowPostFragment(currentItem)
+                showDialog.show(fragmentManager, "ShowPostDialog")
+            }
+
         val pfp = currentItem.userPfp?.toBytes()
         if (pfp != null) {
             holder.userPfp.setImageBitmap(BitmapFactory.decodeByteArray(pfp, 0, pfp.size))
@@ -57,7 +64,7 @@ class PostAdapter(val context: Context,
                         notifyItemChanged(position)
                     }
             }
-            editDialog.show(fragmentManager, "EditNewsDialog")
+            editDialog.show(fragmentManager, "EditPostDialog")
         }
 
         if (!isEditable) {
