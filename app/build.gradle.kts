@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.picasso)
     implementation(libs.androidx.preference)
+    implementation(libs.circleimageview)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

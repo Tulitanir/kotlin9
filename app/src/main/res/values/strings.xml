@@ -51,4 +51,6 @@
     <string name="send_image">Отправить</string>
     <string name="image_to_upload">image to upload</string>
     <string name="upload_image">Новый пост</string>
+    <string name="stop_music">Stop music</string>
+    <string name="music_title">Music Title</string>
 </resources>

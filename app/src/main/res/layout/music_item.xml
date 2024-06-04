@@ -31,7 +31,7 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="@string/music_title" />
 
             <ImageButton
                 android:id="@+id/btnPlay"
@@ -46,6 +46,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:contentDescription="@string/stop_music"
                 app:srcCompat="@drawable/ic_fun_stop" />
 
             <ImageButton
