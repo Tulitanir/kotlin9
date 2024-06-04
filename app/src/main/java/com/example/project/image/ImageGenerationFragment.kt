@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -35,6 +36,7 @@ class ImageGenerationFragment : Fragment() {
     private lateinit var apiInterface: HuggingFaceApiInterface
     private lateinit var promptEditText: EditText
     private lateinit var saveButton: Button
+    private lateinit var checkBox: CheckBox
     private lateinit var generateButton: Button
     private lateinit var imageView: ImageView
     private lateinit var progressBar: ProgressBar
@@ -69,18 +71,22 @@ class ImageGenerationFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_image_generation, container, false)
         promptEditText = view.findViewById(R.id.promptEditTextHF)
+        checkBox = view.findViewById(R.id.checkBox)
         generateButton = view.findViewById(R.id.generateButtonHF)
         saveButton = view.findViewById(R.id.saveButtonHF)
         imageView = view.findViewById(R.id.imageViewHF)
         progressBar = view.findViewById(R.id.progressBar)
 
         generateButton.setOnClickListener {
-            val prompt = promptEditText.text.toString().trim()
+            var prompt = promptEditText.text.toString().trim()
             if (prompt.isEmpty()) {
                 Toast.makeText(context, "Пожалуйста, введите подсказку", Toast.LENGTH_SHORT).show()
             }
-
             else {
+                if (checkBox.isChecked) {
+                    prompt += ", masterpiece, best quality, very aesthetic, absurdres"
+                }
+
                 fetchImage(prompt)
             }
         }

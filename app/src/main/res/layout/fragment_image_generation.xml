@@ -26,12 +26,12 @@
             android:id="@+id/generateButtonHF"
             android:layout_width="214dp"
             android:layout_height="75dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="24dp"
             android:text="@string/image_generation_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/promptEditTextHF" />
+            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
         <Button
             android:id="@+id/saveButtonHF"
@@ -70,5 +70,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/generateButtonHF"
             app:layout_constraintVertical_bias="1.0" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="190dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/imagen_enhance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/promptEditTextHF" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
