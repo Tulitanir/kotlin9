@@ -53,4 +53,7 @@
     <string name="upload_image">Новый пост</string>
     <string name="stop_music">Stop music</string>
     <string name="music_title">Music Title</string>
+    <string name="user_login">user login</string>
+    <string name="edit_post">edit post</string>
+    <string name="delete_post">delete post\n</string>
 </resources>

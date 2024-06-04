@@ -37,7 +37,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
         auth = FirebaseAuth.getInstance()
-        auth.signOut()
 
         binding.buttonRegister.setOnClickListener {
             findNavController().navigate(R.id.action_nav_home_to_registationFragment)
