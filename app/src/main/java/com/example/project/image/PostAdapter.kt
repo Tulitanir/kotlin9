@@ -8,12 +8,19 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.R
 import com.example.project.music.MusicAdapter
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 
-class PostAdapter(val context: Context, private val dataList: List<PostInfo>, private val isEditable: Boolean = false):
+class PostAdapter(val context: Context,
+                  private var dataList: MutableList<PostInfo>,
+                  private val db: FirebaseFirestore,
+                  private val isEditable: Boolean = false):
     RecyclerView.Adapter<PostAdapter.PostViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -35,6 +42,10 @@ class PostAdapter(val context: Context, private val dataList: List<PostInfo>, pr
         }
         holder.login.text = currentItem.userLogin
 
+        holder.delete.setOnClickListener {
+            currentItem.post.imageUrl?.let { it1 -> deletePost(position, currentItem.postId, it1) }
+        }
+
         if (!isEditable) {
             holder.edit.visibility = View.GONE
             holder.delete.visibility = View.GONE
@@ -47,5 +58,27 @@ class PostAdapter(val context: Context, private val dataList: List<PostInfo>, pr
         val login: TextView = itemView.findViewById(R.id.userLoginText)
         val edit: ImageButton = itemView.findViewById(R.id.btnEdit)
         val delete: ImageButton = itemView.findViewById(R.id.btnDelete)
+    }
+
+    private fun deletePost(position: Int, id: String, url: String) {
+        val cloudStorage = FirebaseStorage.getInstance().getReferenceFromUrl(url)
+        cloudStorage.delete()
+            .addOnSuccessListener {
+                db.collection("posts").document(id).delete()
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Пост успешно удалён", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(context, "Не удалось удалить пост", Toast.LENGTH_SHORT).show()
+                    }
+
+                dataList.removeAt(position)
+                notifyItemRemoved(position)
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "Не удалось удалить пост", Toast.LENGTH_SHORT).show()
+            }
+
+
     }
 }

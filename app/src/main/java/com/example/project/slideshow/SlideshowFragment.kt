@@ -21,6 +21,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.firestore.toObjects
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class SlideshowFragment : Fragment() {
 
@@ -48,25 +50,37 @@ class SlideshowFragment : Fragment() {
             .get()
             .addOnSuccessListener { result ->
                 val data: MutableList<PostInfo> = mutableListOf()
-                val posts = result.toObjects<ImagePost>()
+                val documents = result.documents
 
-                posts.forEach {post ->
-                    post.userId?.let {
-                        if (it == MainActivity.DataManager.getId()) {
-                            data.add(PostInfo(post, MainActivity.DataManager.getUserData()?.login, MainActivity.DataManager.getUserData()?.image))
-                        } else {
-                            db.collection("users").document(it).get()
-                                .addOnSuccessListener { doc ->
-                                    if (doc.exists()) {
-                                        val user = doc.toObject<User>()
-                                        data.add(PostInfo(post, user?.login, user?.image))
+                for (document in documents) {
+                    val postId = document.id
+                    val post = document.toObject<ImagePost>()
+
+                    if (post != null) {
+                        post.userId?.let {
+                            if (it == MainActivity.DataManager.getId()) {
+                                data.add(
+                                    PostInfo(
+                                        postId,
+                                        post,
+                                        MainActivity.DataManager.getUserData()?.login,
+                                        MainActivity.DataManager.getUserData()?.image
+                                    )
+                                )
+                            } else {
+                                db.collection("users").document(it).get()
+                                    .addOnSuccessListener { doc ->
+                                        if (doc.exists()) {
+                                            val user = doc.toObject<User>()
+                                            data.add(PostInfo(postId, post, user?.login, user?.image))
+                                        }
                                     }
-                                }
+                            }
                         }
                     }
                 }
 
-                postAdapter = PostAdapter(view.context, data, true)
+                postAdapter = PostAdapter(view.context, data, db,true)
                 recyclerView.adapter = postAdapter
                 recyclerView.layoutManager = LinearLayoutManager(context)
             }
