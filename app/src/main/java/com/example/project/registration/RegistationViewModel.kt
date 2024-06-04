@@ -1,4 +1,4 @@
-package com.example.project.registation
+package com.example.project.registration
 
 import androidx.lifecycle.ViewModel
 

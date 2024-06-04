@@ -22,7 +22,7 @@
         tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_registation"
-        android:name="com.example.project.registation.RegistationFragment"
+        android:name="com.example.project.registration.RegistrationFragment"
         android:label="@string/menu_reg"
         tools:layout="@layout/fragment_registation" />
     <fragment

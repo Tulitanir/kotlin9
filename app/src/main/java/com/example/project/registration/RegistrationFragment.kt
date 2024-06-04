@@ -1,4 +1,4 @@
-package com.example.project.registation
+package com.example.project.registration
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -10,13 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.project.databinding.FragmentRegistationBinding
 import com.example.project.util.User
 import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import java.io.File
@@ -25,14 +25,15 @@ import java.io.InputStream
 import java.util.Calendar
 
 
-class RegistationFragment : Fragment() {
+class RegistrationFragment : Fragment() {
 
     private lateinit var imagebytes: ByteArray
     private lateinit var uri: Uri
-    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
     private var date = Calendar.getInstance()
     private var _binding: FragmentRegistationBinding? = null
     private val binding get() = _binding!!
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,6 +41,8 @@ class RegistationFragment : Fragment() {
     ): View {
         _binding = FragmentRegistationBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        auth = FirebaseAuth.getInstance()
+
         binding.button2.setOnClickListener {
             ImagePicker.with(this)
                 .crop()
@@ -51,52 +54,47 @@ class RegistationFragment : Fragment() {
         binding.textdate.setOnClickListener {
             showDatePickerDialog()
         }
+
         binding.button3.setOnClickListener {
             if (areFieldsValid()) {
-                val db = Firebase.firestore
-                FirebaseFirestore.setLoggingEnabled(true)
+                val email = binding.textEmail.text.toString().trim()
+                val password = binding.textPass.text.toString().trim()
 
-                val userbld = User.Builder()
-                    .username(binding.textName.text.toString().trim())
-                    .usersurname(binding.textSurname.text.toString().trim())
-                    .login(binding.textLogin.text.toString().trim())
-                    .password(binding.textPass.text.toString().trim())
-                    .date(binding.textdate.text.toString().trim())
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val userId = auth.currentUser?.uid
+                            val db = Firebase.firestore
+                            FirebaseFirestore.setLoggingEnabled(true)
 
-                if (this::uri.isInitialized) {
-                    userbld.image(imagebytes)
-                }
+                            val userbld = User.Builder()
+                                .username(binding.textName.text.toString().trim())
+                                .usersurname(binding.textSurname.text.toString().trim())
+                                .login(binding.textLogin.text.toString().trim())
+                                .email(email)
+                                .password(password)
+                                .date(binding.textdate.text.toString().trim())
 
-                val user = userbld.build()
+                            if (this::uri.isInitialized) {
+                                userbld.image(imagebytes)
+                            }
 
-                // Проверяем, существует ли пользователь с таким логином
-                db.collection("users")
-                    .whereEqualTo("login", binding.textLogin.text.toString().trim())
-                    .get()
-                    .addOnSuccessListener { documents ->
-                        if (documents.isEmpty) {
-                            // Логин не занят, добавляем нового пользователя
-                            db.collection("users")
-                                .add(user)
-                                .addOnSuccessListener { documentReference ->
-                                    Log.d(
-                                        "TAG",
-                                        "DocumentSnapshot added with ID: ${documentReference.id}"
-                                    )
-                                    findNavController().popBackStack() // Возвращаемся назад только после успешного добавления
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w("TAG", "Error adding document", e)
-                                    showToast("Ошибка при добавлении документа")
-                                }
+                            val user = userbld.build()
+
+                            if (userId != null) {
+                                db.collection("users").document(userId).set(user)
+                                    .addOnSuccessListener {
+                                        Log.d("TAG", "DocumentSnapshot added with ID: $userId")
+                                        findNavController().popBackStack()
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w("TAG", "Error adding document", e)
+                                        showToast("Ошибка при добавлении документа")
+                                    }
+                            }
                         } else {
-                            // Логин уже занят, уведомляем пользователя
-                            showToast("Логин уже занят. Пожалуйста, выберите другой.")
+                            showToast("Ошибка регистрации: ${task.exception?.message}")
                         }
-                    }
-                    .addOnFailureListener { e ->
-                        Log.w("TAG", "Error checking document", e)
-                        showToast("Ошибка при проверке документа")
                     }
             }
         }

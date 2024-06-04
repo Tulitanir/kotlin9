@@ -29,6 +29,7 @@ volley = "1.2.1"
 googleGmsGoogleServices = "4.4.1"
 firebaseAuth = "23.0.0"
 firebaseFirestore = "25.0.0"
+firebaseStorage = "21.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -59,6 +60,7 @@ retrofit-v2110 = { module = "com.squareup.retrofit2:retrofit", version.ref = "re
 volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
