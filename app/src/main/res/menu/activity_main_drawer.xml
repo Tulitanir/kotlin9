@@ -23,6 +23,10 @@
                     android:icon="@drawable/baseline_library_music_24"
                     android:title="@string/menu_music" />
                 <item
+                    android:id="@+id/nav_post_image"
+                    android:icon="@drawable/baseline_add_to_photos_24"
+                    android:title="@string/upload_image" />
+                <item
                     android:id="@+id/nav_imagen"
                     android:icon="@drawable/baseline_art_track_24"
                     android:title="@string/image_generation" />

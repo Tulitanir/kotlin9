@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), PasswordChangeListener {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_edit, R.id.nav_slideshow, R.id.nav_gallery, R.id.nav_music, R.id.nav_imagen, R.id.nav_settings
+                R.id.nav_home, R.id.nav_edit, R.id.nav_slideshow, R.id.nav_gallery, R.id.nav_music, R.id.nav_imagen, R.id.nav_settings, R.id.nav_post_image
             ),
             drawerLayout,
         )

@@ -47,6 +47,11 @@
         android:label="@string/image_generation"
         tools:layout="@layout/fragment_image_generation" />
     <fragment
+        android:id="@+id/nav_post_image"
+        android:name="com.example.project.image.PostImageFragment"
+        android:label="@string/upload_image"
+        tools:layout="@layout/fragment_post_image" />
+    <fragment
         android:id="@+id/nav_settings"
         android:name="com.example.project.util.ApiTokenFragment"
         android:label="@string/settings_label"

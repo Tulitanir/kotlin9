@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">kotlin9</string>
+    <string name="app_name">SomeApp</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -46,4 +46,9 @@
     <string name="settings_category">Параметры</string>
     <string name="imagen_enhance">Добавить улучшающие теги</string>
     <string name="logout">Выйти</string>
+    <string name="image_description">Введите описание</string>
+    <string name="image_select">Выбрать изображение</string>
+    <string name="send_image">Отправить</string>
+    <string name="image_to_upload">image to upload</string>
+    <string name="upload_image">Новый пост</string>
 </resources>
