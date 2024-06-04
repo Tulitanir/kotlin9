@@ -31,7 +31,7 @@ class UpdatePostFragment(
         text = view.findViewById(R.id.imageDescriptionEdit)
         text.setText(postInfo.post.description)
         image = view.findViewById(R.id.uploadedImage)
-        Picasso.get().load(postInfo.post.imageUrl).into(image)
+        Picasso.get().load(postInfo.post.zimageUrl).into(image)
         button = view.findViewById(R.id.uploadChangesButton)
         button.setOnClickListener {
             postInfo.post.description = text.text.toString().trim()

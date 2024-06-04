@@ -39,7 +39,7 @@ class PostAdapter(val context: Context,
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val currentItem = dataList[position]
 
-        Picasso.get().load(currentItem.post.imageUrl).into(holder.image)
+        Picasso.get().load(currentItem.post.zimageUrl).into(holder.image)
         holder.image
             .setOnClickListener {
                 val showDialog = ShowPostFragment(currentItem)
@@ -53,7 +53,7 @@ class PostAdapter(val context: Context,
         holder.login.text = currentItem.userLogin
 
         holder.delete.setOnClickListener {
-            currentItem.post.imageUrl?.let { it1 -> deletePost(position, currentItem.postId, it1) }
+            currentItem.post.zimageUrl?.let { it1 -> deletePost(position, currentItem.postId, it1) }
         }
 
         holder.edit.setOnClickListener {

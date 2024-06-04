@@ -27,7 +27,7 @@
             android:layout_height="94dp"
             android:layout_marginTop="64dp"
             android:textSize="16sp"
-            android:hint="@string/image_description"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/uploadedImage" />

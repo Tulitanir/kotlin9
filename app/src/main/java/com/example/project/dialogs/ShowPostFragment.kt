@@ -29,7 +29,7 @@ class ShowPostFragment (
         text = view.findViewById(R.id.imageDescriptionView)
         text.text = postInfo.post.description
         image = view.findViewById(R.id.uploadedImage)
-        Picasso.get().load(postInfo.post.imageUrl).into(image)
+        Picasso.get().load(postInfo.post.zimageUrl).into(image)
         button = view.findViewById(R.id.exitButton)
         button.setOnClickListener {
             postInfo.post.description = text.text.toString().trim()

@@ -1,21 +1,16 @@
-package com.example.project.slideshow
+package com.example.project.image
 
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.project.MainActivity
 import com.example.project.R
-import com.example.project.databinding.FragmentSlideshowBinding
-import com.example.project.image.ImagePost
-import com.example.project.image.PostAdapter
-import com.example.project.image.PostInfo
 import com.example.project.util.User
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
@@ -23,11 +18,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
-import com.google.firebase.firestore.toObjects
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 
-class SlideshowFragment : Fragment() {
+class AllPostsFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var postAdapter: PostAdapter
@@ -49,7 +41,6 @@ class SlideshowFragment : Fragment() {
 
         val db = Firebase.firestore
         db.collection("posts")
-            .whereEqualTo("userId", MainActivity.DataManager.getId())
             .get()
             .addOnSuccessListener { result ->
                 val data: MutableList<PostInfo> = mutableListOf()
@@ -59,6 +50,8 @@ class SlideshowFragment : Fragment() {
                 for (document in documents) {
                     val postId = document.id
                     val post = document.toObject<ImagePost>()
+
+                    Log.d("Docs: ", document.toString())
 
                     if (post != null) {
                         post.userId?.let {
@@ -77,7 +70,11 @@ class SlideshowFragment : Fragment() {
                                         if (doc.exists()) {
                                             val user = doc.toObject<User>()
                                             data.add(PostInfo(postId, post, user?.login, user?.image))
+                                            Log.d("Doc user: ", user.toString())
                                         }
+                                    }
+                                    .addOnFailureListener {ex ->
+                                        ex.message?.let { it1 -> Log.d("Doc: ", it1) }
                                     }
                                 tasks.add(userTask)
                             }
@@ -87,11 +84,15 @@ class SlideshowFragment : Fragment() {
 
                 Tasks.whenAllSuccess<DocumentSnapshot?>(tasks)
                     .addOnSuccessListener {
-                        postAdapter = PostAdapter(view.context, data, db, parentFragmentManager, true)
+                        Log.d("Data: ", data.toString())
+                        postAdapter = PostAdapter(view.context, data, db, parentFragmentManager)
                         recyclerView.adapter = postAdapter
                         recyclerView.layoutManager = LinearLayoutManager(context)
                     }
-                }
+                    .addOnFailureListener {
+                        Toast.makeText(context, "Не удалось загрузить посты", Toast.LENGTH_SHORT).show()
+                    }
+            }
             .addOnFailureListener {
                 Toast.makeText(context, "Не удалось загрузить посты", Toast.LENGTH_SHORT).show()
             }

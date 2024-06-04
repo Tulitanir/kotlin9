@@ -58,4 +58,6 @@
     <string name="delete_post">delete post\n</string>
     <string name="save_post_changes">Сохранить</string>
     <string name="exit">Выйти</string>
+    <string name="all_posts">Все посты</string>
+    <string name="images_category">Изображения</string>
 </resources>
