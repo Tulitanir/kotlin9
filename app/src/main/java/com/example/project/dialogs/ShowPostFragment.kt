@@ -32,7 +32,6 @@ class ShowPostFragment (
         Picasso.get().load(postInfo.post.zimageUrl).into(image)
         button = view.findViewById(R.id.exitButton)
         button.setOnClickListener {
-            postInfo.post.description = text.text.toString().trim()
             dismiss()
         }
         return view
