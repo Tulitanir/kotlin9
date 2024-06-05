@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.project.MainActivity
 import com.example.project.R
@@ -21,10 +22,17 @@ import com.example.project.dialogs.PasswordChangeDialogFragment
 import com.example.project.util.PasswordChangeListener
 import com.example.project.util.User
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Blob
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageTask
+import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -51,24 +59,23 @@ class Edit_user : Fragment() {
         binding.editSurnameSave.setText(user.usersurname)
         binding.editDateSave.setText(user.date)
         if (user.image != null) {
-            val imagebytesdb = user.image!!.toBytes()
-            binding.imageView.setImageBitmap(
-                BitmapFactory.decodeByteArray(
-                    imagebytesdb,
-                    0,
-                    imagebytesdb.size
-                )
-            )
+            Picasso.get().load(user.image).into(binding.imageView)
         } else {
             binding.imageView.setImageResource(R.mipmap.ic_launcher)
         }
-        binding.changeimagebutton.setOnClickListener {
-            ImagePicker.with(this)
-                .cropSquare()
-                .compress(1024)
-                .maxResultSize(1024, 1024)
-                .start()
+
+        val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
+            if (it != null) {
+                uri = it
+                binding.imageView.setImageURI(uri)
+                imagechanged = true
+            }
         }
+
+        binding.changeimagebutton.setOnClickListener {
+            pickImage.launch("image/*")
+        }
+
         binding.passdiagbutton.setOnClickListener {
             val dialogFragment = PasswordChangeDialogFragment()
             dialogFragment.setPasswordChangeListener(object :
@@ -89,6 +96,8 @@ class Edit_user : Fragment() {
             showDatePickerDialog()
         }
         binding.saveChanges.setOnClickListener {
+            var task: StorageTask<UploadTask.TaskSnapshot>? = null
+
             var hasChanged = false
             if (binding.editNameSave.text.toString() != user.username) {
                 hasChanged = true
@@ -105,13 +114,25 @@ class Edit_user : Fragment() {
             if (this::pass.isInitialized && pass != user.password) {
                 hasChanged = true
                 user.password = pass
+                FirebaseAuth.getInstance().currentUser?.updatePassword(pass)
             }
             if (imagechanged) {
                 hasChanged = true
-                val bitmap: Bitmap = (binding.imageView.drawable as BitmapDrawable).bitmap
-                val byteArrayOutputStream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteArrayOutputStream)
-                user.image = Blob.fromBytes(byteArrayOutputStream.toByteArray())
+
+                val cloudStorage = FirebaseStorage.getInstance().getReference("pfp")
+                val uniqueName = MainActivity.DataManager.getId()!!
+
+                cloudStorage.child(uniqueName).putFile(uri)
+                    .addOnSuccessListener {
+                        it.metadata?.reference?.downloadUrl?.addOnSuccessListener { url ->
+                            user.image = url.toString()
+                            MainActivity.DataManager.setUserData(user)
+                        }
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(context, "Ошибка при сохранении изображения", Toast.LENGTH_SHORT)
+                            .show()
+                    }
             }
             if (hasChanged) {
                 val db = Firebase.firestore
@@ -128,33 +149,6 @@ class Edit_user : Fragment() {
 
         }
         return root
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            uri = data?.data!!
-            val imageFile = File(uri.path!!)
-            val imageStream: InputStream = FileInputStream(imageFile)
-            imagebytes = imageStream.readBytes()
-            val user = MainActivity.DataManager.getUserData()
-            if (!imagechanged && user != null) {
-                if (user.image == null || !imagebytes.contentEquals(user.image!!.toBytes()))
-                    imagechanged = true
-            }
-            binding.imageView.setImageBitmap(
-                BitmapFactory.decodeByteArray(
-                    imagebytes,
-                    0,
-                    imagebytes.size
-                )
-            )
-
-        } else if (resultCode == ImagePicker.RESULT_ERROR) {
-            Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(context, "Task Cancelled", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun showDatePickerDialog() {

@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObject
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity(), PasswordChangeListener {
 
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity(), PasswordChangeListener {
                 }
 
                 R.id.nav_registation -> {
-                    drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                   drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 }
 
                 else -> {
@@ -142,13 +143,13 @@ class MainActivity : AppCompatActivity(), PasswordChangeListener {
             val date = header?.findViewById<TextView>(R.id.headertextDate)
             date!!.text = user.date
 
-            val blb = user.image
+            val imageView: ImageView = header?.findViewById(R.id.headerimageView)!!
+            val pfp = user.image
 
-            if (blb != null) {
-                val arr = blb.toBytes()
-                val bitmap = BitmapFactory.decodeByteArray(arr, 0, arr.size)
-                val image = header?.findViewById<ImageView>(R.id.headerimageView)
-                image!!.setImageBitmap(bitmap)
+            if (pfp != null) {
+                Picasso.get().load(pfp).into(imageView)
+            } else {
+                imageView.setImageResource(R.mipmap.ic_launcher_round)
             }
         }
 

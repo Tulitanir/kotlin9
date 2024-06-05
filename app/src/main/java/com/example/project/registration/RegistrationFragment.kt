@@ -10,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.project.MainActivity
 import com.example.project.databinding.FragmentRegistationBinding
 import com.example.project.util.User
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -19,10 +21,12 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
 import java.util.Calendar
+import java.util.UUID
 
 
 class RegistrationFragment : Fragment() {
@@ -43,12 +47,14 @@ class RegistrationFragment : Fragment() {
         val root: View = binding.root
         auth = FirebaseAuth.getInstance()
 
+        val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
+            if (it != null) {
+                uri = it
+            }
+        }
+
         binding.button2.setOnClickListener {
-            ImagePicker.with(this)
-                .cropSquare()
-                .compress(1024)
-                .maxResultSize(1024, 1024)
-                .start()
+            pickImage.launch("image/*")
         }
 
         binding.textdate.setOnClickListener {
@@ -76,22 +82,50 @@ class RegistrationFragment : Fragment() {
                                 .date(binding.textdate.text.toString().trim())
 
                             if (this::uri.isInitialized) {
-                                userbld.image(imagebytes)
-                            }
+                                val cloudStorage = FirebaseStorage.getInstance().getReference("pfp")
+                                val uniqueName = userId!!
 
-                            val user = userbld.build()
-
-                            if (userId != null) {
-                                db.collection("users").document(userId).set(user)
+                                cloudStorage.child(uniqueName).putFile(uri)
                                     .addOnSuccessListener {
-                                        Log.d("TAG", "DocumentSnapshot added with ID: $userId")
-                                        findNavController().popBackStack()
+                                        it.metadata?.reference?.downloadUrl?.addOnSuccessListener { url ->
+                                            userbld.image(url.toString())
+                                            val user = userbld.build()
+
+                                            db.collection("users").document(userId).set(user)
+                                                .addOnSuccessListener {
+                                                    Log.d("TAG", "DocumentSnapshot added with ID: $userId")
+                                                    MainActivity.DataManager.setUserData(user)
+                                                    auth.signOut()
+                                                    findNavController().popBackStack()
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Log.w("TAG", "Error adding document", e)
+                                                    showToast("Ошибка при добавлении документа")
+                                                }
+                                        }
                                     }
-                                    .addOnFailureListener { e ->
-                                        Log.w("TAG", "Error adding document", e)
-                                        showToast("Ошибка при добавлении документа")
+                                    .addOnFailureListener {
+                                        showToast("Ошибка при сохранении изображения")
                                     }
+                            } else {
+                                val user = userbld.build()
+
+                                if (userId != null) {
+                                    db.collection("users").document(userId).set(user)
+                                        .addOnSuccessListener {
+                                            Log.d("TAG", "DocumentSnapshot added with ID: $userId")
+                                            MainActivity.DataManager.setUserData(user)
+                                            auth.signOut()
+                                            findNavController().popBackStack()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.w("TAG", "Error adding document", e)
+                                            showToast("Ошибка при добавлении документа")
+                                        }
+                                }
                             }
+
+                            
                         } else {
                             showToast("Ошибка регистрации: ${task.exception?.message}")
                         }
@@ -164,21 +198,6 @@ class RegistrationFragment : Fragment() {
     private fun updateDateEditText() {
         val dateFormat = android.text.format.DateFormat.getDateFormat(context)
         binding.textdate.setText(dateFormat.format(date.time))
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            //Image Uri will not be null for RESULT_OK
-            uri = data?.data!!
-            val imageFile = File(uri.path!!)
-            val imageStream: InputStream = FileInputStream(imageFile)
-            imagebytes = imageStream.readBytes()
-        } else if (resultCode == ImagePicker.RESULT_ERROR) {
-            Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(context, "Task Cancelled", Toast.LENGTH_SHORT).show()
-        }
     }
 
     override fun onDestroyView() {

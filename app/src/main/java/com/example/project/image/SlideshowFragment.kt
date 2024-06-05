@@ -57,7 +57,6 @@ class SlideshowFragment : Fragment() {
                 val userIds: MutableSet<String> = mutableSetOf()
                 val postMap: MutableMap<String, MutableList<Pair<String, ImagePost>>> = mutableMapOf()
 
-                // Сначала собираем все userId из постов
                 for (document in result.documents) {
                     val post = document.toObject<ImagePost>()
                     if (post != null) {
@@ -70,7 +69,6 @@ class SlideshowFragment : Fragment() {
                     }
                 }
 
-                // Загружаем данные пользователей одним запросом
                 if (userIds.isNotEmpty()) {
                     db.collection("users").whereIn(FieldPath.documentId(), userIds.toList())
                         .get()
@@ -83,7 +81,6 @@ class SlideshowFragment : Fragment() {
                                 }
                             }
 
-                            // Теперь создаем PostInfo объекты
                             for ((userId, posts) in postMap) {
                                 val user = userMap[userId]
                                 for ((postId, post) in posts) {
@@ -91,7 +88,6 @@ class SlideshowFragment : Fragment() {
                                 }
                             }
 
-                            // Обновляем адаптер после загрузки данных
                             postAdapter = PostAdapter(requireView().context, data, db, parentFragmentManager, true)
                             recyclerView.adapter = postAdapter
                             recyclerView.layoutManager = LinearLayoutManager(context)
@@ -100,7 +96,6 @@ class SlideshowFragment : Fragment() {
                             Toast.makeText(context, "Не удалось загрузить данные пользователей", Toast.LENGTH_SHORT).show()
                         }
                 } else {
-                    // Обновляем адаптер если нет постов с userId
                     postAdapter = PostAdapter(requireView().context, data, db, parentFragmentManager, true)
                     recyclerView.adapter = postAdapter
                     recyclerView.layoutManager = LinearLayoutManager(context)

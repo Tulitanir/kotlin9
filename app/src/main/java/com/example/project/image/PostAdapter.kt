@@ -46,9 +46,9 @@ class PostAdapter(
                 showDialog.show(fragmentManager, "ShowPostDialog")
             }
 
-        val pfp = currentItem.userPfp?.toBytes()
+        val pfp = currentItem.userPfp
         if (pfp != null) {
-            holder.userPfp.setImageBitmap(BitmapFactory.decodeByteArray(pfp, 0, pfp.size))
+            Picasso.get().load(pfp).into(holder.userPfp)
         }
         holder.login.text = currentItem.userLogin
 

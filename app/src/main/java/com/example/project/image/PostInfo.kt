@@ -6,5 +6,5 @@ class PostInfo(
     val postId: String,
     var post: ImagePost,
     val userLogin: String?,
-    val userPfp: Blob?
+    val userPfp: String?
 )

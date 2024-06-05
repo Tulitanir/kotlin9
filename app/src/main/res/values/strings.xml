@@ -60,4 +60,6 @@
     <string name="exit">Выйти</string>
     <string name="all_posts">Все посты</string>
     <string name="images_category">Изображения</string>
+    <string name="change_password">Cменить пароль</string>
+    <string name="change_pfp">Сменить фото</string>
 </resources>
