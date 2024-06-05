@@ -1,10 +1,14 @@
 package com.example.project
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,11 +19,16 @@ import com.example.project.databinding.ActivityMainBinding
 import com.example.project.util.PasswordChangeListener
 import com.example.project.util.User
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.toObject
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity(), PasswordChangeListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    val userDataLoaded = MutableLiveData<Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +38,13 @@ class MainActivity : AppCompatActivity(), PasswordChangeListener {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
+        val auth = FirebaseAuth.getInstance()
+        val db = Firebase.firestore
+
         val drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
+
+        DataManager.setHeader(navView)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -44,6 +58,26 @@ class MainActivity : AppCompatActivity(), PasswordChangeListener {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         val navController = navHostFragment.navController
+
+        if (auth.currentUser != null) {
+            if (DataManager.getUserData() == null) {
+                db.collection("users")
+                    .document(auth.currentUser!!.uid)
+                    .get()
+                    .addOnSuccessListener {
+                        val userId = it.id
+                        val user = it.toObject<User>()
+                        if (user != null) {
+                            DataManager.setId(userId)
+                            DataManager.setUserData(user)
+                            userDataLoaded.value = true
+                        }
+                    }
+            } else {
+                userDataLoaded.value = true
+            }
+        }
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -70,7 +104,6 @@ class MainActivity : AppCompatActivity(), PasswordChangeListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
@@ -87,8 +120,36 @@ class MainActivity : AppCompatActivity(), PasswordChangeListener {
     object DataManager {
         private var user: User? = null
         private var id: String? = null
+        private var header: NavigationView? = null
+
+        fun setHeader(header: NavigationView) {
+            this.header = header
+        }
+
         fun setUserData(user: User) {
             this.user = user
+
+            val text = header?.findViewById<TextView>(R.id.headertextNameSurname)
+            text!!.text = buildString {
+                append(user.username)
+                append(" ")
+                append(user.usersurname)
+            }
+
+            val login = header?.findViewById<TextView>(R.id.headertextLogin)
+            login!!.text = user.login
+
+            val date = header?.findViewById<TextView>(R.id.headertextDate)
+            date!!.text = user.date
+
+            val blb = user.image
+
+            if (blb != null) {
+                val arr = blb.toBytes()
+                val bitmap = BitmapFactory.decodeByteArray(arr, 0, arr.size)
+                val image = header?.findViewById<ImageView>(R.id.headerimageView)
+                image!!.setImageBitmap(bitmap)
+            }
         }
 
         fun getUserData(): User? {

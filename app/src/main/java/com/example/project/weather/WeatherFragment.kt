@@ -2,16 +2,13 @@ package com.example.project.weather
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
 import com.example.project.R
-import com.example.project.music.MusicAdapter
-import com.example.project.music.MusicData
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,7 +59,8 @@ class WeatherFragment : Fragment() {
                             if (data.weather.isNotEmpty()) {
                                 val weather = data.weather[0]
                                 description.text = weather.weatherDescription
-                                val iconUrl = "http://openweathermap.org/img/wn/${weather.icon}@4x.png"
+                                val iconUrl =
+                                    "http://openweathermap.org/img/wn/${weather.icon}@4x.png"
                                 Picasso.get().load(iconUrl).into(icon)
                             }
                             Log.d("onResponse", data.toString())

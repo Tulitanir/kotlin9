@@ -36,7 +36,11 @@ class ApiTokenFragment : Fragment() {
                 saveTokenToPreferences(requireContext(), token)
                 Toast.makeText(requireContext(), "API токен сохранён", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(requireContext(), "Пожалуйста, введите API токен", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Пожалуйста, введите API токен",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -49,7 +53,8 @@ class ApiTokenFragment : Fragment() {
     }
 
     private fun saveTokenToPreferences(context: Context, token: String) {
-        val sharedPreferences = context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            context.getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
         sharedPreferences.edit().putString("api_token", token).apply()
     }
 

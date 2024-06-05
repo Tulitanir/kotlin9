@@ -1,9 +1,6 @@
 package com.example.project.image
 
-import com.example.project.util.User
-import com.google.firebase.firestore.Blob
-
-class ImagePost (
+class ImagePost(
     var userId: String? = null,
     var description: String? = null,
     var zimageUrl: String? = null

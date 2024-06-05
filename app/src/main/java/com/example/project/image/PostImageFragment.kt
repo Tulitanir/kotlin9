@@ -2,23 +2,19 @@ package com.example.project.image
 
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.Fragment
 import com.example.project.MainActivity
 import com.example.project.R
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
@@ -75,7 +71,8 @@ class PostImageFragment : Fragment() {
 
         if (checkData(description)) {
             uri?.let {
-                val uniqueName = UUID.randomUUID().toString() + "_" + (it.lastPathSegment ?: "default_image_name")
+                val uniqueName = UUID.randomUUID().toString() + "_" + (it.lastPathSegment
+                    ?: "default_image_name")
                 cloudStorage.child(uniqueName).putFile(it)
                     .addOnSuccessListener { taskSnapshot ->
                         taskSnapshot.metadata?.reference?.downloadUrl
@@ -93,8 +90,12 @@ class PostImageFragment : Fragment() {
 
                                     db.collection("posts").add(post)
                                         .addOnSuccessListener {
-                                            val navView: NavigationView? = activity?.findViewById(R.id.nav_view)
-                                            navView?.menu?.performIdentifierAction(R.id.nav_slideshow, 0)
+                                            val navView: NavigationView? =
+                                                activity?.findViewById(R.id.nav_view)
+                                            navView?.menu?.performIdentifierAction(
+                                                R.id.nav_slideshow,
+                                                0
+                                            )
                                         }
                                         .addOnFailureListener {
                                             showToast("Не удалось создать пост")

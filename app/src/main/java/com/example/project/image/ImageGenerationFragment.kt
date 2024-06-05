@@ -2,11 +2,9 @@ package com.example.project.image
 
 import android.content.ContentValues
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,8 +79,7 @@ class ImageGenerationFragment : Fragment() {
             var prompt = promptEditText.text.toString().trim()
             if (prompt.isEmpty()) {
                 Toast.makeText(context, "Пожалуйста, введите подсказку", Toast.LENGTH_SHORT).show()
-            }
-            else {
+            } else {
                 if (checkBox.isChecked) {
                     prompt += ", masterpiece, best quality, very aesthetic, absurdres"
                 }
@@ -100,13 +97,17 @@ class ImageGenerationFragment : Fragment() {
 
     private fun saveImageToDevice(file: File) {
         val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "generated_image_${System.currentTimeMillis()}.png")
+            put(
+                MediaStore.Images.Media.DISPLAY_NAME,
+                "generated_image_${System.currentTimeMillis()}.png"
+            )
             put(MediaStore.Images.Media.MIME_TYPE, "image/png")
             put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
         }
 
         val contentResolver = requireContext().contentResolver
-        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+        val uri =
+            contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 
         if (uri != null) {
             contentResolver.openOutputStream(uri).use { outputStream ->
@@ -115,9 +116,14 @@ class ImageGenerationFragment : Fragment() {
                 }
             }
 
-            Toast.makeText(context, "Изображение сохранено на устройство", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Изображение сохранено на устройство", Toast.LENGTH_SHORT)
+                .show()
         } else {
-            Toast.makeText(context, "Не удалось сохранить изображение на устройство", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                "Не удалось сохранить изображение на устройство",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -135,7 +141,8 @@ class ImageGenerationFragment : Fragment() {
                     response.body()?.let { responseBody ->
                         val inputStream = responseBody.byteStream()
                         val imageBytes = inputStream.readBytes()
-                        val tempFile = File.createTempFile("generated_image", ".png", context?.cacheDir)
+                        val tempFile =
+                            File.createTempFile("generated_image", ".png", context?.cacheDir)
                         tempFile.writeBytes(imageBytes)
                         generatedImageFile = tempFile
                         imageView.visibility = View.VISIBLE
@@ -145,10 +152,17 @@ class ImageGenerationFragment : Fragment() {
                 } else {
                     progressBar.visibility = View.GONE
                     if (response.code() == 400) {
-                        Toast.makeText(context, "Ошибка при получении изображения: ${response.message()}. Возможно API токен недействителен", Toast.LENGTH_SHORT).show()
-                    }
-                    else {
-                        Toast.makeText(context, "Ошибка при получении изображения: ${response.message()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Ошибка при получении изображения: ${response.message()}. Возможно API токен недействителен",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Ошибка при получении изображения: ${response.message()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -161,7 +175,8 @@ class ImageGenerationFragment : Fragment() {
     }
 
     private fun getTokenFromPreferences(): String {
-        val sharedPreferences = requireContext().getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
         return sharedPreferences.getString("api_token", "") ?: ""
     }
 

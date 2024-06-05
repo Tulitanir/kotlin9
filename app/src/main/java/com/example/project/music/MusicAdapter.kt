@@ -14,9 +14,10 @@ import com.example.project.R
 import com.squareup.picasso.Picasso
 
 
-class MusicAdapter(val context: Context, private val dataList: List<Data>,
-                   val setCurrentMediaPlayer: (MediaPlayer) -> Unit
-):
+class MusicAdapter(
+    val context: Context, private val dataList: List<Data>,
+    val setCurrentMediaPlayer: (MediaPlayer) -> Unit
+) :
     RecyclerView.Adapter<MusicAdapter.MusicViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
@@ -56,7 +57,7 @@ class MusicAdapter(val context: Context, private val dataList: List<Data>,
     }
 
 
-    class MusicViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class MusicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.musicImage)
         val title: TextView = itemView.findViewById(R.id.musicTitle)
         val play: ImageButton = itemView.findViewById(R.id.btnPlay)

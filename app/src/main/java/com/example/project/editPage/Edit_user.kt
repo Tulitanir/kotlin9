@@ -12,10 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.project.MainActivity
 import com.example.project.R
@@ -123,7 +120,6 @@ class Edit_user : Fragment() {
                 if (id != null) {
                     db.collection("users").document(id).set(user)
                     MainActivity.DataManager.setUserData(user)
-                    updateUserInfo(user)
 
                     val navView: NavigationView? = activity?.findViewById(R.id.nav_view)
                     navView?.menu?.performIdentifierAction(R.id.nav_slideshow, 0)
@@ -180,34 +176,5 @@ class Edit_user : Fragment() {
     private fun updateDateEditText() {
         val dateFormat = android.text.format.DateFormat.getDateFormat(context)
         binding.editDateSave.setText(dateFormat.format(date.time))
-    }
-
-    private fun updateUserInfo(user: User) {
-        val header =
-            (requireActivity() as AppCompatActivity).findViewById<NavigationView>(R.id.nav_view)
-                ?.getHeaderView(0)
-
-        var text = header?.findViewById<TextView>(R.id.headertextNameSurname)
-        text!!.text = buildString {
-            append(user.username)
-            append(" ")
-            append(user.usersurname)
-        }
-        text = header?.findViewById(R.id.headertextLogin)
-        text!!.text = buildString {
-            append(user.login)
-        }
-        text = header?.findViewById(R.id.headertextDate)
-        text!!.text = buildString {
-            append(user.date)
-        }
-        if (user.image != null) {
-            val blb: Blob = user.image as Blob
-            val arr = blb.toBytes()
-            val bitmap = BitmapFactory.decodeByteArray(arr, 0, arr.size)
-            val image = header?.findViewById<ImageView>(R.id.headerimageView)
-            image?.setImageBitmap(bitmap)
-
-        }
     }
 }

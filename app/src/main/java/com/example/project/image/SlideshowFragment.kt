@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 
@@ -38,51 +39,73 @@ class SlideshowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as MainActivity).userDataLoaded.observe(viewLifecycleOwner) { isLoaded ->
+            if (isLoaded) {
+                loadPosts()
+            }
+        }
+    }
+
+    private fun loadPosts() {
         val db = Firebase.firestore
-        db.collection("posts")
+        val query = db.collection("posts")
             .whereEqualTo("userId", MainActivity.DataManager.getId())
-            .get()
+
+        query.get()
             .addOnSuccessListener { result ->
                 val data: MutableList<PostInfo> = mutableListOf()
-                val documents = result.documents
-                val tasks = mutableListOf<Task<DocumentSnapshot?>>()
+                val userIds: MutableSet<String> = mutableSetOf()
+                val postMap: MutableMap<String, MutableList<Pair<String, ImagePost>>> = mutableMapOf()
 
-                for (document in documents) {
-                    val postId = document.id
+                // Сначала собираем все userId из постов
+                for (document in result.documents) {
                     val post = document.toObject<ImagePost>()
-
                     if (post != null) {
-                        post.userId?.let {
-                            if (it == MainActivity.DataManager.getId()) {
-                                data.add(
-                                    PostInfo(
-                                        postId,
-                                        post,
-                                        MainActivity.DataManager.getUserData()?.login,
-                                        MainActivity.DataManager.getUserData()?.image
-                                    )
-                                )
-                            } else {
-                                val userTask = db.collection("users").document(it).get()
-                                    .addOnSuccessListener { doc ->
-                                        if (doc.exists()) {
-                                            val user = doc.toObject<User>()
-                                            data.add(PostInfo(postId, post, user?.login, user?.image))
-                                        }
-                                    }
-                                tasks.add(userTask)
-                            }
+                        val postId = document.id
+                        val userId = post.userId
+                        if (userId != null) {
+                            userIds.add(userId)
+                            postMap.getOrPut(userId) { mutableListOf() }.add(postId to post)
                         }
                     }
                 }
 
-                Tasks.whenAllSuccess<DocumentSnapshot?>(tasks)
-                    .addOnSuccessListener {
-                        postAdapter = PostAdapter(view.context, data, db, parentFragmentManager, true)
-                        recyclerView.adapter = postAdapter
-                        recyclerView.layoutManager = LinearLayoutManager(context)
-                    }
+                // Загружаем данные пользователей одним запросом
+                if (userIds.isNotEmpty()) {
+                    db.collection("users").whereIn(FieldPath.documentId(), userIds.toList())
+                        .get()
+                        .addOnSuccessListener { userResult ->
+                            val userMap: MutableMap<String, User> = mutableMapOf()
+                            for (userDocument in userResult.documents) {
+                                val user = userDocument.toObject<User>()
+                                if (user != null) {
+                                    userMap[userDocument.id] = user
+                                }
+                            }
+
+                            // Теперь создаем PostInfo объекты
+                            for ((userId, posts) in postMap) {
+                                val user = userMap[userId]
+                                for ((postId, post) in posts) {
+                                    data.add(PostInfo(postId = postId, post = post, userLogin = user?.login, userPfp = user?.image))
+                                }
+                            }
+
+                            // Обновляем адаптер после загрузки данных
+                            postAdapter = PostAdapter(requireView().context, data, db, parentFragmentManager, true)
+                            recyclerView.adapter = postAdapter
+                            recyclerView.layoutManager = LinearLayoutManager(context)
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(context, "Не удалось загрузить данные пользователей", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    // Обновляем адаптер если нет постов с userId
+                    postAdapter = PostAdapter(requireView().context, data, db, parentFragmentManager, true)
+                    recyclerView.adapter = postAdapter
+                    recyclerView.layoutManager = LinearLayoutManager(context)
                 }
+            }
             .addOnFailureListener {
                 Toast.makeText(context, "Не удалось загрузить посты", Toast.LENGTH_SHORT).show()
             }
