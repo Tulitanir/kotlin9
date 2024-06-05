@@ -67,9 +67,9 @@ class Edit_user : Fragment() {
         }
         binding.changeimagebutton.setOnClickListener {
             ImagePicker.with(this)
-                .crop()
+                .cropSquare()
                 .compress(1024)
-                .maxResultSize(1080, 1080)
+                .maxResultSize(1024, 1024)
                 .start()
         }
         binding.passdiagbutton.setOnClickListener {
