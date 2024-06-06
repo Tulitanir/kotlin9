@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
 
@@ -45,7 +46,7 @@ class AllPostsFragment : Fragment() {
 
     private fun loadPosts() {
         val db = Firebase.firestore
-        val query = db.collection("posts")
+        val query = db.collection("posts").orderBy("date", Query.Direction.ASCENDING)
 
         query.get()
             .addOnSuccessListener { result ->

@@ -57,9 +57,10 @@
     <string name="edit_post">edit post</string>
     <string name="delete_post">delete post\n</string>
     <string name="save_post_changes">Сохранить</string>
-    <string name="exit">Выйти</string>
+    <string name="exit">Отправить комментарий</string>
     <string name="all_posts">Все посты</string>
     <string name="images_category">Изображения</string>
     <string name="change_password">Cменить пароль</string>
     <string name="change_pfp">Сменить фото</string>
+    <string name="comment_text">Напишите комментарий</string>
 </resources>

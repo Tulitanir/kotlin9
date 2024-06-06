@@ -15,6 +15,7 @@ import com.example.project.MainActivity
 import com.example.project.R
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
@@ -86,6 +87,7 @@ class PostImageFragment : Fragment() {
                                         .imageUrl(url.toString())
                                         .description(description)
                                         .userId(userId)
+                                        .date(Timestamp.now())
                                         .build()
 
                                     db.collection("posts").add(post)

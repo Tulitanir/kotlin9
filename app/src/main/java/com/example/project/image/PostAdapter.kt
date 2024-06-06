@@ -1,7 +1,6 @@
 package com.example.project.image
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +38,7 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val currentItem = dataList[position]
 
-        Picasso.get().load(currentItem.post.zimageUrl).into(holder.image)
+        Picasso.get().load(currentItem.post.imageUrl).into(holder.image)
         holder.image
             .setOnClickListener {
                 val showDialog = ShowPostFragment(currentItem)
@@ -53,7 +52,7 @@ class PostAdapter(
         holder.login.text = currentItem.userLogin
 
         holder.delete.setOnClickListener {
-            currentItem.post.zimageUrl?.let { it1 -> deletePost(position, currentItem.postId, it1) }
+            currentItem.post.imageUrl?.let { it1 -> deletePost(position, currentItem.postId, it1) }
         }
 
         holder.edit.setOnClickListener {
