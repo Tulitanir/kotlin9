@@ -85,7 +85,7 @@ class AllPostsFragment : Fragment() {
                                 }
                             }
 
-                            postAdapter = PostAdapter(requireView().context, data, db, parentFragmentManager, true)
+                            postAdapter = PostAdapter(requireView().context, data, db, parentFragmentManager)
                             recyclerView.adapter = postAdapter
                             recyclerView.layoutManager = LinearLayoutManager(context)
                         }
@@ -93,7 +93,7 @@ class AllPostsFragment : Fragment() {
                             Toast.makeText(context, "Не удалось загрузить данные пользователей", Toast.LENGTH_SHORT).show()
                         }
                 } else {
-                    postAdapter = PostAdapter(requireView().context, data, db, parentFragmentManager, true)
+                    postAdapter = PostAdapter(requireView().context, data, db, parentFragmentManager)
                     recyclerView.adapter = postAdapter
                     recyclerView.layoutManager = LinearLayoutManager(context)
                 }
