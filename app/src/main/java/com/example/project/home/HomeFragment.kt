@@ -35,9 +35,8 @@ class HomeFragment : Fragment() {
         db = Firebase.firestore
         auth = FirebaseAuth.getInstance()
 
-        if (auth.currentUser != null) {
-            findNavController().navigate(R.id.nav_slideshow)
-        }
+        auth.signOut()
+        MainActivity.DataManager.clearData()
 
         binding.buttonRegister.setOnClickListener {
             findNavController().navigate(R.id.action_nav_home_to_registationFragment)

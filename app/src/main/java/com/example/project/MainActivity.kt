@@ -60,25 +60,6 @@ class MainActivity : AppCompatActivity(), PasswordChangeListener {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         val navController = navHostFragment.navController
 
-        if (auth.currentUser != null) {
-            if (DataManager.getUserData() == null) {
-                db.collection("users")
-                    .document(auth.currentUser!!.uid)
-                    .get()
-                    .addOnSuccessListener {
-                        val userId = it.id
-                        val user = it.toObject<User>()
-                        if (user != null) {
-                            DataManager.setId(userId)
-                            DataManager.setUserData(user)
-                            userDataLoaded.value = true
-                        }
-                    }
-            } else {
-                userDataLoaded.value = true
-            }
-        }
-
         setupActionBarWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {

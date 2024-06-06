@@ -38,12 +38,7 @@ class SlideshowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        (activity as MainActivity).userDataLoaded.observe(viewLifecycleOwner) { isLoaded ->
-            if (isLoaded) {
-                loadPosts()
-            }
-        }
+        loadPosts()
     }
 
     private fun loadPosts() {
