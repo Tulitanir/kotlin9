@@ -1,5 +1,7 @@
 package com.example.project.image
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,9 +12,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.scale
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import com.example.project.MainActivity
 import com.example.project.R
+import com.example.project.util.ImageTagger
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
@@ -22,11 +27,14 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.util.UUID
 
+
 class PostImageFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var editText: EditText
+    private lateinit var generateButton: Button
     private lateinit var selectButton: Button
     private lateinit var uploadButton: Button
+    private lateinit var imageTagger: ImageTagger
     private lateinit var cloudStorage: StorageReference
 
     private var uri: Uri? = null
@@ -36,9 +44,11 @@ class PostImageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_post_image, container, false)
+        imageTagger = ImageTagger(activity?.filesDir!!)
 
         imageView = view.findViewById(R.id.uploadedImage)
         editText = view.findViewById(R.id.imageDescription)
+        generateButton = view.findViewById(R.id.generateButton)
         selectButton = view.findViewById(R.id.selectButton)
         uploadButton = view.findViewById(R.id.uploadButton)
 
@@ -46,9 +56,16 @@ class PostImageFragment : Fragment() {
             if (it != null) {
                 imageView.setImageURI(it)
                 imageView.visibility = View.VISIBLE
+                generateButton.visibility = View.VISIBLE
                 editText.visibility = View.VISIBLE
                 uri = it
             }
+        }
+
+        generateButton.setOnClickListener {
+            val bitmap = imageView.drawToBitmap()
+
+            editText.setText(imageTagger.inference(bitmap))
         }
 
         selectButton.setOnClickListener {

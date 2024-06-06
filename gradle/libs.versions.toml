@@ -21,6 +21,9 @@ fragmentKtx = "1.5.6"
 firebaseCommonKtx = "21.0.0"
 firebaseFirestoreKtx = "25.0.0"
 okhttp = "4.9.1"
+onnxruntimeAndroid = "1.7.0"
+onnxruntimeAndroidVersion = "1.17.1"
+opencsv = "5.5.2"
 picasso = "2.8"
 playServicesCastFramework = "21.4.0"
 playServicesLocation = "21.2.0"
@@ -56,6 +59,9 @@ androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", ve
 firebase-common-ktx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+onnxruntime-android = { module = "com.microsoft.onnxruntime:onnxruntime-android", version.ref = "onnxruntimeAndroid" }
+onnxruntime-android-v1171 = { module = "com.microsoft.onnxruntime:onnxruntime-android", version.ref = "onnxruntimeAndroidVersion" }
+opencsv = { module = "com.opencsv:opencsv", version.ref = "opencsv" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 play-services-cast-framework = { group = "com.google.android.gms", name = "play-services-cast-framework", version.ref = "playServicesCastFramework" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }

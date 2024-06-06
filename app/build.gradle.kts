@@ -66,7 +66,10 @@ dependencies {
     implementation(libs.picasso)
     implementation(libs.androidx.preference)
     implementation(libs.circleimageview)
+    implementation(libs.opencsv)
+    implementation(libs.onnxruntime.android.v1171)
+    implementation(libs.okhttp)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.okhttp)
+
 }
