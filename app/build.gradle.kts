@@ -68,4 +68,5 @@ dependencies {
     implementation(libs.circleimageview)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.okhttp)
 }
