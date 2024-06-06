@@ -22,13 +22,15 @@
 
         <TextView
             android:id="@+id/imageDescriptionView"
-            android:layout_width="match_parent"
-            android:layout_height="94dp"
-            android:layout_marginTop="60dp"
-            android:textAlignment="center"
+            android:layout_width="344dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="8dp"
+            android:scrollHorizontally="false"
+            android:text="Описание изображения"
             android:textSize="26sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.246"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/postDateTextView" />
 
@@ -36,10 +38,10 @@
             android:id="@+id/commentEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:textSize="32sp"
+            android:layout_marginTop="20dp"
             android:hint="@string/comment_text"
-            app:layout_constraintTop_toBottomOf="@+id/imageDescriptionView"
+            android:textSize="32sp"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             tools:layout_editor_absoluteX="0dp" />
 
         <Button
@@ -64,8 +66,8 @@
 
         <TextView
             android:id="@+id/postDateTextView"
-            android:layout_width="237dp"
-            android:layout_height="58dp"
+            android:layout_width="235dp"
+            android:layout_height="34dp"
             android:layout_marginTop="16dp"
             android:text="Date"
             android:textSize="26sp"
@@ -73,5 +75,33 @@
             app:layout_constraintHorizontal_bias="0.091"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/uploadedImage" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageDescriptionView">
+
+            <ImageButton
+                android:id="@+id/likeButton"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:src="@drawable/ic_like" />
+
+            <TextView
+                android:id="@+id/likesCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

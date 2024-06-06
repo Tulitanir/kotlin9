@@ -6,7 +6,8 @@ class ImagePost(
     var userId: String? = null,
     var description: String? = null,
     var imageUrl: String? = null,
-    var date: Timestamp? = null
+    var date: Timestamp? = null,
+    var likes: List<String?> = listOf()
 ) {
     data class Builder(
         private var userId: String? = null,

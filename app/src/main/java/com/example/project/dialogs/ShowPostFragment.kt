@@ -1,6 +1,6 @@
 package com.example.project.dialogs
 
-import android.icu.text.DateFormat
+import android.graphics.Color
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -20,7 +22,6 @@ import com.example.project.R
 import com.example.project.comment.Comment
 import com.example.project.comment.CommentInfo
 import com.example.project.comment.CommentsAdapter
-import com.example.project.image.ImagePost
 import com.example.project.image.PostInfo
 import com.example.project.util.User
 import com.google.firebase.Firebase
@@ -29,7 +30,6 @@ import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.toObject
-import com.google.firebase.firestore.toObjects
 import com.squareup.picasso.Picasso
 import java.util.Locale
 
@@ -42,6 +42,8 @@ class ShowPostFragment(
     private lateinit var image: ImageView
     private lateinit var button: Button
     private lateinit var commentEditText: EditText
+    private lateinit var likeButton: ImageButton
+    private lateinit var likesCountTextView: TextView
     private lateinit var recyclerView: RecyclerView
     private val data: MutableList<CommentInfo> = mutableListOf()
 
@@ -63,6 +65,14 @@ class ShowPostFragment(
             postComment()
         }
         commentEditText = view.findViewById(R.id.commentEditText)
+        likeButton = view.findViewById(R.id.likeButton)
+        likesCountTextView = view.findViewById(R.id.likesCountTextView)
+        likesCountTextView.text = postInfo.post.likes.toString()
+        updateLikeStatus()
+
+        likeButton.setOnClickListener {
+            likePost()
+        }
 
         recyclerView = view.findViewById(R.id.commentsRecyclerView)
         return view
@@ -158,6 +168,41 @@ class ShowPostFragment(
                     Toast.makeText(context, "Не удалось добавить комментарий", Toast.LENGTH_SHORT).show()
                     Log.w("Comment upload: ", "Error posting comment", e)
                 }
+        }
+    }
+
+    private fun likePost() {
+        val currentUserId = MainActivity.DataManager.getId()
+        val hasLiked = currentUserId in postInfo.post.likes
+        val newLikes = if (hasLiked) {
+            postInfo.post.likes - currentUserId
+        } else {
+            postInfo.post.likes + currentUserId
+        }
+        val db = Firebase.firestore
+        db.collection("posts").document(postInfo.postId)
+            .update("likes", newLikes)
+            .addOnSuccessListener {
+                postInfo.post.likes = newLikes
+                updateLikeStatus()
+            }
+            .addOnFailureListener { e ->
+                Log.w("Likes change: ", "Error updating likes", e)
+            }
+    }
+
+    private fun updateLikeStatus() {
+        val currentUserId = MainActivity.DataManager.getId()
+        val defaultColor = text.textColors.defaultColor
+        val color = Color.GREEN
+        val hasLiked = currentUserId in postInfo.post.likes
+        likesCountTextView.text = postInfo.post.likes.size.toString()
+        if (hasLiked) {
+            likesCountTextView.setTextColor(color)
+            likeButton.setColorFilter(color)
+        } else {
+            likesCountTextView.setTextColor(defaultColor)
+            likeButton.setColorFilter(defaultColor)
         }
     }
 
