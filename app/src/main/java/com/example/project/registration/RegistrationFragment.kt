@@ -78,7 +78,6 @@ class RegistrationFragment : Fragment() {
                                 .usersurname(binding.textSurname.text.toString().trim())
                                 .login(binding.textLogin.text.toString().trim())
                                 .email(email)
-                                .password(password)
                                 .date(binding.textdate.text.toString().trim())
 
                             if (this::uri.isInitialized) {

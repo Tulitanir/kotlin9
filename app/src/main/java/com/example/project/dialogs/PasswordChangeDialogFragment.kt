@@ -47,8 +47,6 @@ class PasswordChangeDialogFragment : DialogFragment() {
                             .show()
                         return@setPositiveButton
                     }
-
-                    // Call listener method to change password
                     listener!!.onChangePassword(oldPassword, newPassword)
 
                     dialog.dismiss()

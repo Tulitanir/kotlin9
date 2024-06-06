@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.net.Credentials
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -26,7 +27,10 @@ import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Firebase
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.Blob
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
@@ -47,6 +51,7 @@ class Edit_user : Fragment() {
     private val binding get() = _binding!!
     private lateinit var pass: String
     private lateinit var uri: Uri
+    private lateinit var auth: FirebaseAuth
     private var imagechanged = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +60,7 @@ class Edit_user : Fragment() {
         _binding = FragmentEditUserBinding.inflate(inflater, container, false)
         val root: View = binding.root
         val user: User? = MainActivity.DataManager.getUserData()
+        auth = FirebaseAuth.getInstance()
         binding.editNameSave.setText(user!!.username)
         binding.editSurnameSave.setText(user.usersurname)
         binding.editDateSave.setText(user.date)
@@ -81,13 +87,15 @@ class Edit_user : Fragment() {
             dialogFragment.setPasswordChangeListener(object :
                 PasswordChangeListener {
                 override fun onChangePassword(oldPassword: String, newPassword: String) {
-                    if (user.password == oldPassword) {
-                        pass = newPassword
-                        Log.d("adg", pass)
-                    } else {
-                        Toast.makeText(context, "Вы ввели неверный пароль", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                    val credentials = EmailAuthProvider.getCredential(user.email!!, oldPassword)
+                    auth.currentUser?.reauthenticate(credentials)
+                        ?.addOnSuccessListener {
+                            pass = newPassword
+                        }
+                        ?.addOnFailureListener {
+                            Toast.makeText(context, "Вы ввели неверный пароль", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                 }
             })
             dialogFragment.show(requireActivity().supportFragmentManager, "PasswordChangeDialog")
@@ -96,8 +104,6 @@ class Edit_user : Fragment() {
             showDatePickerDialog()
         }
         binding.saveChanges.setOnClickListener {
-            var task: StorageTask<UploadTask.TaskSnapshot>? = null
-
             var hasChanged = false
             if (binding.editNameSave.text.toString() != user.username) {
                 hasChanged = true
@@ -111,10 +117,9 @@ class Edit_user : Fragment() {
                 hasChanged = true
                 user.date = binding.editDateSave.text.toString()
             }
-            if (this::pass.isInitialized && pass != user.password) {
+            if (this::pass.isInitialized) {
                 hasChanged = true
-                user.password = pass
-                FirebaseAuth.getInstance().currentUser?.updatePassword(pass)
+                auth.currentUser?.updatePassword(pass)
             }
             if (imagechanged) {
                 hasChanged = true

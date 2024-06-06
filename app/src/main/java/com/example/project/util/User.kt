@@ -7,7 +7,6 @@ class User(
     var usersurname: String? = null,
     var login: String? = null,
     var email: String? = null,
-    var password: String? = null,
     var image: String? = null,
     var date: String? = null
 ) {
@@ -25,14 +24,13 @@ class User(
         fun usersurname(usersurname: String) = apply { this.usersurname = usersurname }
         fun login(login: String) = apply { this.login = login }
         fun email(email: String) = apply { this.email = email }
-        fun password(password: String) = apply { this.password = password }
         fun date(date: String) = apply { this.date = date }
         fun image(image: String) = apply { this.image = image }
-        fun build() = User(username, usersurname, login, email, password, image, date)
+        fun build() = User(username, usersurname, login, email, image, date)
     }
 
     override fun toString(): String {
-        return "User(username=$username, usersurname=$usersurname, login=$login, password=$password, image=$image, date=$date)"
+        return "User(username=$username, usersurname=$usersurname, login=$login, image=$image, date=$date)"
     }
 
 }
