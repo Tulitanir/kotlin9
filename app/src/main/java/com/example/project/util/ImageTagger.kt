@@ -20,6 +20,10 @@ class ImageTagger(filesDir: File) {
     private var tags: List<Tag>? = null
 
     suspend fun inference(bitmap: Bitmap): String {
+        if (!model.exists() || !tagsFile.exists()) {
+            throw Exception("Модель не загружена. Сначала загрузите модель")
+        }
+
         with(Dispatchers.Default) {
             if (tags == null) {
                 tags = readTagsFromCSV()

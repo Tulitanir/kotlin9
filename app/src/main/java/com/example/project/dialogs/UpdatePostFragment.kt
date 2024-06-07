@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.view.drawToBitmap
 import androidx.fragment.app.DialogFragment
 import com.example.project.R
@@ -16,6 +17,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UpdatePostFragment(
     private var postInfo: PostInfo,
@@ -50,7 +52,15 @@ class UpdatePostFragment(
             val bitmap = image.drawToBitmap()
 
             CoroutineScope(Dispatchers.Default).launch {
-                text.setText(imageTagger.inference(bitmap))
+                try {
+                    text.setText(imageTagger.inference(bitmap))
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        e.localizedMessage?.let { context?.let {
+                            Toast.makeText(it, e.localizedMessage, Toast.LENGTH_LONG).show()
+                        } }
+                    }
+                }
             }
         }
 

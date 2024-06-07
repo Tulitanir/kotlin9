@@ -28,6 +28,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 
@@ -69,7 +70,13 @@ class PostImageFragment : Fragment() {
             val bitmap = imageView.drawToBitmap()
 
             CoroutineScope(Dispatchers.Default).launch {
-                editText.setText(imageTagger.inference(bitmap))
+                try {
+                    editText.setText(imageTagger.inference(bitmap))
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        e.localizedMessage?.let { showToast(it) }
+                    }
+                }
             }
         }
 
