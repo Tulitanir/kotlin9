@@ -32,7 +32,7 @@ class ImageTagger(filesDir: File) {
             val result = session.run((mapOf("input" to input)))
 
             val outputTensor = result[0].value as Array<FloatArray>
-            val threshold = 0.2653
+            val threshold = 0.35
             val probabilities = outputTensor[0].toList()
 
             val filteredTags = tags!!.zip(probabilities)

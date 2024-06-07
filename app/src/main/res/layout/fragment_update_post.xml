@@ -34,6 +34,17 @@
             app:layout_constraintTop_toBottomOf="@+id/uploadedImage" />
 
         <Button
+            android:id="@+id/generateButton"
+            android:layout_width="258dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="40dp"
+            android:text="Сгенерировать теги"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageDescriptionEdit" />
+
+        <Button
             android:id="@+id/uploadChangesButton"
             android:layout_width="258dp"
             android:layout_height="48dp"
@@ -42,6 +53,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageDescriptionEdit" />
+            app:layout_constraintTop_toBottomOf="@+id/generateButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
