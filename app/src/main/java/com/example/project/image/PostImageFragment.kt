@@ -2,6 +2,7 @@ package com.example.project.image
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import kotlinx.coroutines.CoroutineScope
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 
@@ -65,7 +68,9 @@ class PostImageFragment : Fragment() {
         generateButton.setOnClickListener {
             val bitmap = imageView.drawToBitmap()
 
-            editText.setText(imageTagger.inference(bitmap))
+            CoroutineScope(Dispatchers.Default).launch {
+                editText.setText(imageTagger.inference(bitmap))
+            }
         }
 
         selectButton.setOnClickListener {
