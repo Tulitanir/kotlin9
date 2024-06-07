@@ -67,9 +67,9 @@ class ImageTagger(filesDir: File) {
             for (j in 0 until imageSize) {
                 val idx = imageSize * i + j
                 val pixelValue = intValues[idx]
-                floatBuffer.put(idx, ((pixelValue shr 16 and 0xFF) / 255.0f - mean[0]) / std[0])
-                floatBuffer.put(idx + stride, ((pixelValue shr 8 and 0xFF) / 255.0f - mean[1]) / std[1])
-                floatBuffer.put(idx + stride * 2,((pixelValue and 0xFF) / 255.0f - mean[2]) / std[2])
+                floatBuffer.put(((pixelValue and 0xFF)).toFloat())
+                floatBuffer.put(((pixelValue shr 8 and 0xFF).toFloat()))
+                floatBuffer.put(((pixelValue shr 16 and 0xFF).toFloat()))
             }
         }
         floatBuffer.rewind()
