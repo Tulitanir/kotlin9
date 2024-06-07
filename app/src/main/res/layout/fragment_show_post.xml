@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/imageDescriptionView"
             android:layout_width="344dp"
-            android:layout_height="43dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="13dp"
             android:layout_marginTop="8dp"
             android:scrollHorizontally="false"
